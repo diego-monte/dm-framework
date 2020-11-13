@@ -1,0 +1,23 @@
+
+{
+    "name": "diego-monte/dm-framework",
+    "description": "DM-Framework - Developing with ease",
+    "keywords": ["framework", "dm", "dm-framework", "diego-monte"],
+    "license": "MIT",
+    "homepage": "https://diegomonte.com.br",
+    "support": {
+        "issues": "https://github.com/diego-monte/dm-framework/issues",
+        "source": "https://github.com/laravel/framework"
+    },
+    "authors": [
+        {
+            "name": "Diego Monte",
+            "email": "d.h.m@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+    }
+}
