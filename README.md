@@ -4,6 +4,7 @@ The framework has the objective of easy web development, integrating the back-en
 
 # Install
 * Deploy the dm-framework.
+* Install composer.json [getcomposer](https://getcomposer.org/download/ "site getcomposer")
 * Give permission with the command <b>chmod -R 777</b> in <b>/dm-framework</b>.
 * You will need to create an example database "<b>dm_framework</b>".
 * You will have to fill in the fields with your bank details.
