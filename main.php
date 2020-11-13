@@ -2,6 +2,7 @@
 // Disable errors
 error_reporting(0);
 // Including classes
+require_once("vendor/autoload.php");
 require_once("config/constants.php");
 require_once("core/class_alerts.php");
 require_once("core/class_views.php");
