@@ -10,8 +10,11 @@
 class Controllers extends Alerts {
 
     public $model;
+    private $log;
 
-    public function __construct() {}
+    public function __construct() {
+        $this->log = new Log;
+    }
     // Function loads the model
     public function load_model($file) {
         // Models files path
@@ -25,10 +28,12 @@ class Controllers extends Alerts {
                 // Instance to class
                 $this->model = new $file;
             } else {
+                $this->log->write(array("MSG"=> $file_model . " " . MSG_ERROR_500, "CLASS" => __CLASS__));
                 // Displays an error if the class is poorly structured
                 die($this->errorBild(500, $file_model . "<br><br>" . MSG_ERROR_TAG)); 
             }
         } else {
+            $this->log->write(array("MSG"=> $file_model . " " . MSG_ERROR_404));
             // If the file entered in the url is not found it will display an error
             die($this->errorBild(404, $file_model . "<br><br>" . MSG_ERROR_404)); 
         }   

@@ -29,10 +29,12 @@ class Models {
     private $join;
     private $transaction = false;
     private $data;
-
+    private $log;
     private $teste;
 
     public function __construct() {
+
+        $this->log = new Log;
 
         $this->usuario = DATABASE['DATABASE']['usuario'];
         $this->senha = DATABASE['DATABASE']['senha'];
@@ -47,6 +49,7 @@ class Models {
                 , $this->porta);
 
         if (mysqli_connect_errno()) {
+            $this->log->write(array("MSG"=> "The connection failed!", "CLASS" => __CLASS__)); 
             die(mysqli_connect_errno());
         }
         mysqli_set_charset($this->dbh, "utf8");
@@ -147,7 +150,8 @@ class Models {
                 return $key . " < '" . $this->escape($val[$vKey]) . "'";
             case 'lte':
                 return $key . " <= '" . $this->escape($val[$vKey]) . "'";
-            default :                
+            default :    
+                $this->log->write(array("MSG"=> "Recurso $vKey desconhecido", "CLASS" => __CLASS__));            
                 die("Recurso $vKey desconhecido");
         }
     }
@@ -239,10 +243,12 @@ class Models {
                 if ($this->transaction){
                     $this->rollback();
                 }
+                $this->log->write(array("MSG"=> "ERROR DELETE", "CLASS" => __CLASS__, "QUERY" => $delete)); 
                 die('ERROR DELETE');
             }
         } else {
             $this->clearsql();
+            $this->log->write(array("MSG"=> "ERROR DELETE", "CLASS" => __CLASS__, "QUERY" => $delete)); 
             die('DELETE ERROR SYSTEM');
         }
     }
@@ -287,7 +293,7 @@ class Models {
                 if ($this->transaction){
                     $this->rollback();
                 }
-                
+                $this->log->write(array("MSG"=> "ERROR UPDATE", "CLASS" => __CLASS__, "QUERY" => $update)); 
                 die('UPDATE ERROR SISTEM');
             }
         } else {
@@ -321,6 +327,7 @@ class Models {
             }
 
             if (mysqli_errno($this->dbh) == 1406) {
+                $this->log->write(array("MSG"=> mysqli_error($this->dbh), "CLASS" => __CLASS__)); 
                 die(mysqli_error($this->dbh));
             }
 

@@ -11,8 +11,11 @@ class Views extends Alerts {
 
     public $controller;
     public $set_template;
+    private $log;
 
-    public function __construct() {}
+    public function __construct() {
+        $this->log = new Log;
+    }
 
     // VIEW LOAD FUNCTION
     public function load_view($route, $uris) {
@@ -32,6 +35,7 @@ class Views extends Alerts {
                 // Instance to class
                 new $route_no_extencion($uris);
             } else {
+                $this->log->write(array("MSG"=> $file_view . " " . MSG_ERROR_500, "CLASS" => __CLASS__));
                 // Displays an error if the class is poorly structured
                 die($this->errorBild(500, $file_view . "<br><br>" . MSG_ERROR_500));
             }
@@ -41,8 +45,9 @@ class Views extends Alerts {
             // Includes the file 
             require_once($assets["path"]); 
         } else {
+            $this->log->write(array("MSG"=> $route_no_extencion . " FILE NOT FOUND"));
             // If the file entered in the url is not found it will display an error
-            die($this->errorBild(404, $route_no_extencion));
+            die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
         }
     }
     // LOAD FUNCTION TO CONTROLLER
@@ -58,12 +63,14 @@ class Views extends Alerts {
                 // Instance to class
                 $this->controller = new $file(); 
             } else {
+                $this->log->write(array("MSG"=> $file_view . " " . MSG_ERROR_500, "CLASS" => __CLASS__));
                 // Displays an error if the class is poorly structured
                 die($this->errorBild(500, $file_view . "<br><br>" . MSG_ERROR_500));
             }
         } else {
+            $this->log->write(array("MSG"=> $route_no_extencion . " FILE NOT FOUND"));
             // If the file entered in the url is not found it will display an error
-            die($this->errorBild(404, $route_no_extencion));
+            die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
         }
     }
     // FUNCTION LOAD TEMPLATE FILES
@@ -74,14 +81,16 @@ class Views extends Alerts {
         if(file_exists($file_html)) {
             return file_get_contents($file_html);
         } else {
+            $this->log->write(array("MSG"=> $route_no_extencion . " FILE NOT FOUND"));
             // If the file entered in the url is not found it will display an error
-            die($this->errorBild(404, $route_no_extencion));
+            die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
         }
     }
     // INSTANCE PHP FUNCTION IN HTML
     public function setDATA_HTML($tag, $value, $html) {
         // Tag validation
         if(!preg_match('/^\{\{([a-zA-Z0-9-_]+)\}\}$/', $tag)) { 
+            $this->log->write(array("MSG"=> $tag . " " . MSG_ERROR_TAG, "CLASS" => __CLASS__));
             die($this->errorBild(500, $tag . "<br><br>" . MSG_ERROR_TAG));
         }
         return str_replace($tag, $value, $html);
