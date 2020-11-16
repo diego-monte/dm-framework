@@ -7,6 +7,7 @@
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.0.0.0 | November 13rd, 2020|
+| 1.1.0.0 | November 16rd, 2020|
 
 ## Reporting a Vulnerability
 
