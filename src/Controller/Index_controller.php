@@ -1,6 +1,8 @@
 <?php
 
-class Index_controller extends Controllers {
+use Core\Controllers as Controllers;
+
+class Index_controller extends Controllers\ControllersClass {
 
     public function __construct() {
         parent::__construct();

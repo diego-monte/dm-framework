@@ -1,13 +1,15 @@
 <?php
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-class Alerts {
+namespace Core\Alerts;
+
+class Actions {
 
     public function __construct() {}
     // Responsible function in assembling an error build.

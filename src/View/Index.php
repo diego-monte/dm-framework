@@ -1,6 +1,8 @@
 <?php 
 
-class Index extends Views {
+use Core\Views as Views;
+
+class Index extends Views\ViewsClass {
 
     public function __construct($metodos) {
 

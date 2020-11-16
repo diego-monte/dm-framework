@@ -1,19 +1,23 @@
 <?php
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-class Controllers extends Alerts {
+namespace Core\Controllers;
+use Core\Alerts as Alerts;
+use Core\Logs as Logs;
+
+class ControllersClass extends Alerts\Actions {
 
     public $model;
     private $log;
 
     public function __construct() {
-        $this->log = new Log;
+        $this->log = new Logs\Log;
     }
     // Function loads the model
     public function load_model($file) {

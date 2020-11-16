@@ -1,15 +1,13 @@
 <?php
 error_reporting(0);
-
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-
 // Connect to the database
 function conectDB() {
 
@@ -26,6 +24,12 @@ function conectDB() {
 
     if(isset($_POST['install'])) {
       
+      $tableExist = mysqli_query($db, "SHOW TABLES LIKE 'contacts'")->num_rows;
+
+      if ($tableExist > 0) {
+        return true;
+      }
+
       $ret = mysqli_query($db, "
         CREATE TABLE `contacts` (
           `ct_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -61,7 +65,7 @@ function createFileConexaoMysql() {
 	endereco = '.$_POST['address'].'
 	';
 
-	$fp = fopen(__DIR__ . "/config/conexao_mysql.ini","wb");
+	$fp = fopen(__DIR__ . "/Config/Conexao_mysql.ini","wb");
 	fwrite($fp, $source);
 	fclose($fp);
 
@@ -80,7 +84,7 @@ function createFileConstats() {
     <?php
     /**
      * DM-FRAMEWORK 2020-2020
-     * Version: 1.0.0.0
+     * Version: 1.1.0.0
      * Author: Diego Monte
      * E-Mail: d.h.m@hotmail.com
      * 
@@ -88,7 +92,7 @@ function createFileConstats() {
      */
 
 		// ARQUIVO DE CONEXAO AO BANCO DE DADOS
-		define('DATABASE', parse_ini_file(\"conexao_mysql.ini\", true));
+		define('DATABASE', parse_ini_file(\"Conexao_mysql.ini\", true));
 		// PATH'S
 		define('PATH_VIEW', \"src/View\");
 		define('PATH_CONTROLLER', \"src/Controller\");
@@ -96,10 +100,11 @@ function createFileConstats() {
 		define('PATH_TEMPLATE', \"src/Templates\");
 		define('TEMPLATE', \"Default\");
     define('PATH_ASSETS', \"Assets\");
+    define('PATH_LOGS', \"Storage/logs\");
 		// SYSTEM
 		define('DEPLOY', \"$deploy\");
 		define('PAGE_DEFAULT', \"index\");
-    define('VERSION', \"1.0.0.0\");
+    define('VERSION', \"1.1.0.0\");
     // MSGS
     define('MSG_ERROR_TAG', \"ERROR TAG, EXAMPLE OF HOW TO USE TAG {{STRING}}\");
     define('MSG_ERROR_500', \"CLASS DOES NOT EXIST OR IS POORLY STRUCTURED\");
@@ -107,7 +112,7 @@ function createFileConstats() {
 		?>
 	";
 
-	$fp = fopen(__DIR__ . "/config/constants.php","wb");
+	$fp = fopen(__DIR__ . "/Config/Constants.php","wb");
 	fwrite($fp, $source);
 	fclose($fp);
 
@@ -122,7 +127,7 @@ function createFileHtaccess() {
 
   $source = "
   # DM-FRAMEWORK 2020-2020
-  # Version: 1.0.0.0
+  # Version: 1.1.0.0
   # Author: Diego Monte
   # E-Mail: d.h.m@hotmail.com
   # OBS: The framework is free to change but keep the credits.
@@ -147,8 +152,8 @@ function createFileHtaccess() {
 }
 // Creating config directory
 function createDirConfig() {
-	if(mkdir('config', 0777, true)) {
-		chmod('config', 0777);
+	if(mkdir('Config', 0777, true)) {
+		chmod('Config', 0777);
 		return true;
 	} else {
 		return false;
@@ -170,17 +175,17 @@ if(count($_POST) > 0) {
 			if(createDirConfig()) {
 				if(createFileConexaoMysql()) {
 					$finish[] = "success";
-					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> conexao_mysql.ini file successfully created.<br>";
+					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Conexao_mysql.ini file successfully created.<br>";
 				} else {
 					$finish[] = "problem";
-					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file conexao_mysql.ini (Permission denied).<br>";
+					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Conexao_mysql.ini (Permission denied).<br>";
 				}
 				if(createFileConstats()) {
 					$finish[] = "success";
-					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> constant.php file successfully created.<br>";
+					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Constant.php file successfully created.<br>";
 				} else {
 					$finish[] = "problem";
-					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file constants.php (Permission denied).<br>";
+					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Constants.php (Permission denied).<br>";
 				}
 				if(createFileHtaccess()) {
 					$finish[] = "success";
@@ -226,16 +231,14 @@ if(count($_POST) > 0) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Favicons -->
-  <link href="storage/images/favicon.ico" rel="icon">
-  <link href="storage/images/favicon.ico" rel="apple-touch-icon">
+  <link href="Storage/images/favicon.ico" rel="icon">
+  <link href="Storage/images/favicon.ico" rel="apple-touch-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
   <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'>
-
-  storage/images/logo.png
   <style>
     body {
       background: #181818;
@@ -312,7 +315,7 @@ if(count($_POST) > 0) {
 <body>
 
 <div class="jumbotron text-center">
-  <img src="storage/images/logo-dois.png" class="logo-dois" />
+  <img src="Storage/images/logo-dois.png" class="logo-dois" />
 
 </div>
   
@@ -375,7 +378,7 @@ if(count($_POST) > 0) {
 
         <div class="row">
           <div class="col-sm-12 text-center footer">
-            <p>Developed by <a href="https://diegomonte.com.br" target="_blank">diegomonte.com.br</a> - v1.0.0.0 - 2020-2020</p>
+            <p>Developed by <a href="https://diegomonte.com.br" target="_blank">diegomonte.com.br</a> - v1.1.0.0 - 2020-2020</p>
           </div> 
         </div>
 

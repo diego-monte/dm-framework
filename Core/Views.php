@@ -1,27 +1,31 @@
 <?php
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-class Views extends Alerts {
+
+ namespace Core\Views;
+ use Core\Alerts as Alerts;
+ use Core\Logs as Logs;
+
+class ViewsClass extends Alerts\Actions {
 
     public $controller;
     public $set_template;
     private $log;
 
     public function __construct() {
-        $this->log = new Log;
+        $this->log = new Logs\Log;
     }
 
     // VIEW LOAD FUNCTION
     public function load_view($route, $uris) {
 
         $route_no_extencion = str_replace(".php","", $route);
-
         // Load files inside Assets example css and js
         $assets = $this->load_assets($route_no_extencion); 
         // File path views

@@ -3,20 +3,22 @@
 //error_reporting(0);
 // Including classes
 require_once("vendor/autoload.php");
-require_once("core/class_logs.php");
-require_once("config/constants.php");
-require_once("core/class_alerts.php");
-require_once("core/class_views.php");
-require_once("core/class_controllers.php");
-require_once("core/class_models.php");
+require_once("Core/Logs.php");
+require_once("Config/Constants.php");
+require_once("Core/Alerts.php");
+require_once("Core/Views.php");
+require_once("Core/Controllers.php");
+require_once("Core/Models.php");
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
+use Core\Views as Views;
+
 class Main {
 
     private $data;
@@ -26,7 +28,7 @@ class Main {
         // Taking requests
         $uris = htmlentities($_GET['url']);
         // Calling the views class
-        $this->route = new Views();
+        $this->route = new Views\ViewsClass;
         // If the route is not found, the index will be informed as the default
         if($uris != "") {
             // Uris for array

@@ -1,14 +1,16 @@
 <?php
-require_once("./config/constants.php");
+require_once("./Config/Constants.php");
 /**
  * DM-FRAMEWORK 2020-2020
- * Version: 1.0.0.0
+ * Version: 1.1.0.0
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-class Models {
+use Core\Logs as Logs;
+
+class ModelsClass {
 
     private $mysqlComands = array("now()","NULL");
     private $dbh;
@@ -34,7 +36,7 @@ class Models {
 
     public function __construct() {
 
-        $this->log = new Log;
+        $this->log = new Logs\Log;
 
         $this->usuario = DATABASE['DATABASE']['usuario'];
         $this->senha = DATABASE['DATABASE']['senha'];
