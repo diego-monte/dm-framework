@@ -13,8 +13,7 @@ The framework has the objective of easy web development, integrating the back-en
 
 # ScreenShots
 Fill in correctly with the connection data and the bank created.
-[![install.png](https://i.postimg.cc/yYrNc1rR/install.png)](https://diegomonte.com.br)
-
+[![install.png](https://i.postimg.cc/yNGJsRWX/install.png)](https://diegomonte.com.br)
 If there was no error in the checklists that means everything went well, don't forget to remove the install.php installation file
 [![install-finish.png](https://i.postimg.cc/L6fHYtfc/install-finish.png)](https://diegomonte.com.br)
 
