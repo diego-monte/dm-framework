@@ -131,7 +131,7 @@ function createFileHtaccess() {
 	RewriteCond %{REQUEST_URI} !-f
 	RewriteCond %{REQUEST_URI} !-d
 	RewriteCond %{REQUEST_URI} !-l
-	RewriteCond $1 !\.(gif|jpe?g|png)$ [NC]
+	RewriteCond $1 !\.(gif|jpe?g|png|ico)$ [NC]
 	RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
 	";
 
@@ -225,12 +225,17 @@ if(count($_POST) > 0) {
   <title>Install - DM Framework</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Favicons -->
+  <link href="storage/images/favicon.ico" rel="icon">
+  <link href="storage/images/favicon.ico" rel="apple-touch-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
   <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'>
+
+  storage/images/logo.png
   <style>
     body {
       background: #181818;
@@ -297,14 +302,18 @@ if(count($_POST) > 0) {
 		border-radius: 30px;
 		color: #169F44;
 		text-align: center;
+  }
+  .logo-dois {
+    width: 500px;
+    height: 95px;
 	}
   </style>
 </head>
 <body>
 
 <div class="jumbotron text-center">
-  <h1>DM Framework</h1>
-  <p>Develop for the web with ease.</p> 
+  <img src="storage/images/logo-dois.png" class="logo-dois" />
+
 </div>
   
 <div class="container">
