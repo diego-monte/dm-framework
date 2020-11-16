@@ -1,4 +1,4 @@
-/config
+/Config
 /vendor
 composer.lock
 .htaccess
