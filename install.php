@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 /**
  * DM-FRAMEWORK 2020-2020
  * Version: 1.1.0.0
@@ -11,13 +11,14 @@ error_reporting(0);
 // Connect to the database
 function conectDB() {
 
-	$db = new \mysqli(
-    $_POST['address'], 
-    $_POST['user'], 
-    $_POST['password'], 
-    $_POST['database'], 
-    $_POST['port']
-  );
+  $address = htmlentities($_POST['address']);
+  $user = htmlentities($_POST['user']);
+  $password = htmlentities($_POST['password']);
+  $database = htmlentities($_POST['database']);
+  $port = (int)htmlentities($_POST['port']); 
+
+  $db = new \mysqli($address, $user, $password, $database, $port);
+  
 	if($db->client_info == null) {
 	  return false;
 	} else {
@@ -78,13 +79,14 @@ function createFileConexaoMysql() {
 // Creating file constants
 function createFileConstats() {
 
-	$deploy = basename(__DIR__);
+  $deploy = basename(__DIR__);
+  
+  $rand = rand(0,99999999);
 
 	$source = "
     <?php
     /**
-     * DM-FRAMEWORK 2020-2020
-     * Version: 1.1.0.0
+     * DM-FRAMEWORK
      * Author: Diego Monte
      * E-Mail: d.h.m@hotmail.com
      * 
@@ -109,6 +111,66 @@ function createFileConstats() {
     define('MSG_ERROR_TAG', \"ERROR TAG, EXAMPLE OF HOW TO USE TAG {{STRING}}\");
     define('MSG_ERROR_500', \"CLASS DOES NOT EXIST OR IS POORLY STRUCTURED\");
     define('MSG_ERROR_404', \"FILE NOT FOUND\");
+    // KEY JWT
+    define('KEY_JWT', \"$rand\");
+    define('MSG_ERROR_METHOD', \"Method not allowed\");
+    define('MSG_ERROR_ARRAY', \"Expected array\");
+    define('MSG_ERROR_FILE', \"Accessing file\");
+    define('MSG_ERROR_SYSTEM', \"System error\");
+    define('MSG_ERROR_RECURSO', \"Unknown resource\");
+    define('MSG_ERROR_JSON', \"Invalid json\");
+    define('MSG_ERROR_NOT_FUND', \"Data not found\");
+    define('MSG_ERROR_USER_TERMINAL', \"Invalid username / password\");
+    define('MSG_ERROR_CERTIFY', \"Unauthorized certificate token\");
+    define('MSG_ERROR_USER_EXPIRED', \"Expired user\");
+    define('MSG_ERROR_ACCESS', \"Unauthorized access to this resource\");
+    define('MSG_ERROR_AUTHORIZATION', \"Missing invalid token or authorization type\");
+    define('MSG_ERROR_IVALID', \"Invalid parameter\");
+    define('MSG_ERROR_TYPE_ACCEPT', \"Missing reader type {accept: application/json}\");
+    define('MSG_ERROR_JWT', \"\");
+    define('ERROR_FUNCTION', \"\");
+    define('MSG_ERROR_DELETE', \"Resource cannot be deleted as it is used by another\");
+    define('HTTP_STATUS_100', \"Continue\");
+    define('HTTP_STATUS_101', \"Switching Protocols\");
+    define('HTTP_STATUS_200', \"OK\");
+    define('HTTP_STATUS_201', \"Created\");
+    define('HTTP_STATUS_202', \"Accepted\");
+    define('HTTP_STATUS_203', \"Non-Authoritative Information\");
+    define('HTTP_STATUS_204', \"No Content\");
+    define('HTTP_STATUS_205', \"Reset Content\");
+    define('HTTP_STATUS_206', \"Partial Content\");
+    define('HTTP_STATUS_300', \"Multiple Choices\");
+    define('HTTP_STATUS_301', \"Moved Permanently\");
+    define('HTTP_STATUS_302', \"Found\");
+    define('HTTP_STATUS_303', \"See Other\");
+    define('HTTP_STATUS_304', \"Not Modified\");
+    define('HTTP_STATUS_305', \"Use Proxy\");
+    define('HTTP_STATUS_306', \"(Unused)\");
+    define('HTTP_STATUS_307', \"Temporary Redirect\");
+    define('HTTP_STATUS_400', \"Bad Request\");
+    define('HTTP_STATUS_401', \"Unauthorized\");
+    define('HTTP_STATUS_402', \"Payment Required\");
+    define('HTTP_STATUS_403', \"Forbidden\");
+    define('HTTP_STATUS_404', \"Not Found\");
+    define('HTTP_STATUS_405', \"Method Not Allowed\");
+    define('HTTP_STATUS_406', \"Not Acceptable\");
+    define('HTTP_STATUS_407', \"Proxy Authentication Required\");
+    define('HTTP_STATUS_408', \"Request Timeout\");
+    define('HTTP_STATUS_409', \"Conflict\");
+    define('HTTP_STATUS_410', \"Gone\");
+    define('HTTP_STATUS_411', \"Length Required\");
+    define('HTTP_STATUS_412', \"Precondition Failed\");
+    define('HTTP_STATUS_413', \"Request Entity Too Large\");
+    define('HTTP_STATUS_414', \"Request-URI Too Long\");
+    define('HTTP_STATUS_415', \"Unsupported Media Type\");
+    define('HTTP_STATUS_416', \"Requested Range Not Satisfiable\");
+    define('HTTP_STATUS_417', \"Expectation Failed\");
+    define('HTTP_STATUS_500', \"Internal Server Error\");
+    define('HTTP_STATUS_501', \"Not Implemented\");
+    define('HTTP_STATUS_502', \"Bad Gateway\");
+    define('HTTP_STATUS_503', \"Service Unavailable\");
+    define('HTTP_STATUS_504', \"Gateway Timeout\");
+    define('HTTP_STATUS_505', \"HTTP Version Not Supported\");
 		?>
 	";
 
@@ -132,12 +194,15 @@ function createFileHtaccess() {
   # E-Mail: d.h.m@hotmail.com
   # OBS: The framework is free to change but keep the credits.
 
+  ErrorDocument 400 /src/Errors/404.html
+	ErrorDocument 500 /src/Errors/500.html
+
 	RewriteEngine On
 	RewriteCond %{REQUEST_URI} !-f
 	RewriteCond %{REQUEST_URI} !-d
 	RewriteCond %{REQUEST_URI} !-l
 	RewriteCond $1 !\.(gif|jpe?g|png|ico)$ [NC]
-	RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
+  RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
 	";
 
 	$fp = fopen(__DIR__ . "/.htaccess","wb");

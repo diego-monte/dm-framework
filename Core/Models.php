@@ -1,8 +1,7 @@
 <?php
 require_once("./Config/Constants.php");
 /**
- * DM-FRAMEWORK 2020-2020
- * Version: 1.1.0.0
+ * DM-FRAMEWORK
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
@@ -35,28 +34,35 @@ class ModelsClass {
     private $teste;
 
     public function __construct() {
+        try {
+            $this->log = new Logs\Log;
 
-        $this->log = new Logs\Log;
+            $this->usuario = DATABASE['DATABASE']['usuario'];
+            $this->senha = DATABASE['DATABASE']['senha'];
+            $this->banco = DATABASE['DATABASE']['banco'];
+            $this->porta = (int)DATABASE['DATABASE']['porta'];
+            $this->endereco = DATABASE['DATABASE']['endereco'];
 
-        $this->usuario = DATABASE['DATABASE']['usuario'];
-        $this->senha = DATABASE['DATABASE']['senha'];
-        $this->banco = DATABASE['DATABASE']['banco'];
-        $this->porta = DATABASE['DATABASE']['porta'];
-        $this->endereco = DATABASE['DATABASE']['endereco'];
+            $this->dbh = new \mysqli($this->endereco
+                    , $this->usuario
+                    , $this->senha
+                    , $this->banco
+                    , $this->porta);
 
-        $this->dbh = new \mysqli($this->endereco
-                , $this->usuario
-                , $this->senha
-                , $this->banco
-                , $this->porta);
+            if (mysqli_connect_errno()) {
+                throw new \InvalidArgumentException("The connection failed!");
+            }
+            mysqli_set_charset($this->dbh, "utf8");
 
-        if (mysqli_connect_errno()) {
-            $this->log->write(array("MSG"=> "The connection failed!", "CLASS" => __CLASS__)); 
-            die(mysqli_connect_errno());
+            $this->sSQL = '';
+
+        } catch (\Exception $e) {
+            $this->log->write(array(
+                "MSG"=> $e->getMessage(),
+                "ERROR" => mysqli_connect_error(), 
+                "CLASS" => __CLASS__
+            ));
         }
-        mysqli_set_charset($this->dbh, "utf8");
-
-        $this->sSQL = '';
     }
 
     public function __destruct() {
@@ -134,27 +140,31 @@ class ModelsClass {
     }
 
     private function make_custom_where($key,$val){
-        $vKey = array_keys($val)[0];
-        switch($vKey){
-            case 'eq':
-                return $key . " = '" . $this->escape($val[$vKey]) .  "'";
-            case 'lk':
-                return $key . " like '%" . $this->escape($val[$vKey]) .  "%'";
-            case 'lks':
-                return $key . " like '" . $this->escape($val[$vKey]) .  "%'";
-            case 'lke':
-                return $key . " like '%" . $this->escape($val[$vKey]) .  "'";
-            case 'gt':
-                return $key . " > '" . $this->escape($val[$vKey]) . "'";
-            case 'gte':
-                return $key . " >= '" . $this->escape($val[$vKey]) . "'";
-            case 'lt':
-                return $key . " < '" . $this->escape($val[$vKey]) . "'";
-            case 'lte':
-                return $key . " <= '" . $this->escape($val[$vKey]) . "'";
-            default :    
-                $this->log->write(array("MSG"=> "Recurso $vKey desconhecido", "CLASS" => __CLASS__));            
-                die("Recurso $vKey desconhecido");
+        try {
+            $vKey = array_keys($val)[0];
+            switch($vKey){
+                case 'eq':
+                    return $key . " = '" . $this->escape($val[$vKey]) .  "'";
+                case 'lk':
+                    return $key . " like '%" . $this->escape($val[$vKey]) .  "%'";
+                case 'lks':
+                    return $key . " like '" . $this->escape($val[$vKey]) .  "%'";
+                case 'lke':
+                    return $key . " like '%" . $this->escape($val[$vKey]) .  "'";
+                case 'gt':
+                    return $key . " > '" . $this->escape($val[$vKey]) . "'";
+                case 'gte':
+                    return $key . " >= '" . $this->escape($val[$vKey]) . "'";
+                case 'lt':
+                    return $key . " < '" . $this->escape($val[$vKey]) . "'";
+                case 'lte':
+                    return $key . " <= '" . $this->escape($val[$vKey]) . "'";
+                default :  
+                    throw new \InvalidArgumentException(array("MSG"=> "Unknown $vKey resource", "CLASS" => __CLASS__));  
+            }
+
+        } catch (\Exception $e) {
+            $this->log->write($e->getMessage());
         }
     }
     
@@ -215,43 +225,50 @@ class ModelsClass {
     }
 
     public function delete($dump = false) {
-        $i = 0;
-        $sWhere = '';
-        if (!empty($this->where)) {
-            foreach ($this->where as $val) {
-                if ($i != 0) {
-                    $sWhere .= ' and ';
+        try {
+            $i = 0;
+            $sWhere = '';
+            if (!empty($this->where)) {
+                foreach ($this->where as $val) {
+                    if ($i != 0) {
+                        $sWhere .= ' and ';
+                    }
+                    $sWhere .= $val;
+                    $i++;
                 }
-                $sWhere .= $val;
-                $i++;
+                $sWhere = " where " . $sWhere;
             }
-            $sWhere = " where " . $sWhere;
-        }
 
-        $delete = "delete from " . $this->from . ' ' . $sWhere;
-        
-        if ($dump){
-            die($delete);
-        }
+            $delete = "delete from " . $this->from . ' ' . $sWhere;
+            
+            if ($dump){
+                die($delete);
+            }
 
-        if ($this->auditoria($this->from, $sWhere, 'delete')) {
-            if (mysqli_query($this->dbh, $delete)) {
-                $rows_affected = $this->getaffectedrows();
+            if ($this->auditoria($this->from, $sWhere, 'delete')) {
+                if (mysqli_query($this->dbh, $delete)) {
+                    $rows_affected = $this->getaffectedrows();
 
-                $this->clearsql();
-                return $rows_affected;
+                    $this->clearsql();
+                    return $rows_affected;
+                } else {
+                    $this->clearsql();
+                    if ($this->transaction){
+                        $this->rollback();
+                    }
+                    throw new \InvalidArgumentException(array("MSG"=> "Delete error system", "QUERY" => $delete, "CLASS" => __CLASS__)); 
+                }
             } else {
                 $this->clearsql();
-                if ($this->transaction){
-                    $this->rollback();
-                }
-                $this->log->write(array("MSG"=> "ERROR DELETE", "CLASS" => __CLASS__, "QUERY" => $delete)); 
-                die('ERROR DELETE');
+                throw new \InvalidArgumentException("Delete error system");
             }
-        } else {
-            $this->clearsql();
-            $this->log->write(array("MSG"=> "ERROR DELETE", "CLASS" => __CLASS__, "QUERY" => $delete)); 
-            die('DELETE ERROR SYSTEM');
+
+        } catch (\Exception $e) {
+            $this->log->write(array(
+                "MSG"=> $e->getMessage(),
+                "QUERY" => $delete, 
+                "CLASS" => __CLASS__
+            ));
         }
     }
 
@@ -260,172 +277,195 @@ class ModelsClass {
     }
 
     public function update($dump = false) {
-        $i = 0;
-        $sWhere = '';
-        if (!empty($this->where)) {
-            foreach ($this->where as $val) {
-                if ($i != 0) {
-                    $sWhere .= ' and ';
+        try {
+            $i = 0;
+            $sWhere = '';
+            if (!empty($this->where)) {
+                foreach ($this->where as $val) {
+                    if ($i != 0) {
+                        $sWhere .= ' and ';
+                    }
+                    $sWhere .= $val;
+                    $i++;
                 }
-                $sWhere .= $val;
-                $i++;
+                $sWhere = " where " . $sWhere;
             }
-            $sWhere = " where " . $sWhere;
-        }
-        $set = '';
-        foreach ($this->set as $val) {
-            $set .= $val . ',';
-        }
+            $set = '';
+            foreach ($this->set as $val) {
+                $set .= $val . ',';
+            }
 
-        $set = substr($set, 0, -1);
+            $set = substr($set, 0, -1);
 
-        $update = "update " . $this->from . " set " . $set . " " . $sWhere;
+            $update = "update " . $this->from . " set " . $set . " " . $sWhere;
 
-        if ($dump){
-            die($update);
-        }
+            if ($dump){
+                die($update);
+            }
 
-        if ($this->auditoria($this->from, $sWhere, 'update')) {
-            if (mysqli_query($this->dbh, $update)) {
-                $this->clearsql();
-                return true;
+            if ($this->auditoria($this->from, $sWhere, 'update')) {
+                if (mysqli_query($this->dbh, $update)) {
+                    $this->clearsql();
+                    return true;
+                } else {
+                    $this->clearsql();
+                    
+                    if ($this->transaction){
+                        $this->rollback();
+                    }
+                    throw new \InvalidArgumentException("Update error system");
+                }
             } else {
                 $this->clearsql();
-                
-                if ($this->transaction){
-                    $this->rollback();
-                }
-                $this->log->write(array("MSG"=> "ERROR UPDATE", "CLASS" => __CLASS__, "QUERY" => $update)); 
-                die('UPDATE ERROR SISTEM');
+                throw new \InvalidArgumentException("Update error system");
             }
-        } else {
-            $this->clearsql();
-            throw new InvalidArgumentException('{'
-                    . TYPE_SYSTEM
-                    . ', ' . ERROR_SYSTEM
-                    . ', ' . ERROR_FUNCTION . __FUNCTION__ . '"}');
+
+        } catch (\Exception $e) {
+            $this->log->write(array(
+                "MSG"=> $e->getMessage(),
+                "QUERY" => $update, 
+                "CLASS" => __CLASS__
+            ));
         }
     }
 
     public function insert($dump = false) {
-        $set = '';
-        foreach ($this->set as $val) {
-            $set .= $val . ',';
-        }
+        try {
+            $set = '';
+            foreach ($this->set as $val) {
+                $set .= $val . ',';
+            }
 
-        $set = substr($set, 0, -1);
+            $set = substr($set, 0, -1);
 
-        $insert = "insert into " . $this->from . " set " . $set;
+            $insert = "insert into " . $this->from . " set " . $set;
 
-        if ($dump){
-            die($insert);
-        }
+            if ($dump){
+                die($insert);
+            }
 
-        $query = mysqli_query($this->dbh, $insert);
-        if ($query === false) {
+            $query = mysqli_query($this->dbh, $insert);
+            if ($query === false) {
+                $this->clearsql();
+                if ($this->transaction) {
+                    $this->rollback();
+                }
+
+                if (mysqli_errno($this->dbh) == 1406) {
+                    throw new \InvalidArgumentException(mysqli_error($this->dbh));
+                }
+
+                throw new \InvalidArgumentException("Insert error system");
+            }
             $this->clearsql();
-            if ($this->transaction) {
-                $this->rollback();
-            }
+            return mysqli_insert_id($this->dbh);
 
-            if (mysqli_errno($this->dbh) == 1406) {
-                $this->log->write(array("MSG"=> mysqli_error($this->dbh), "CLASS" => __CLASS__)); 
-                die(mysqli_error($this->dbh));
-            }
-
-            die('INSERT ERROR SYSTEM');
+        } catch (\Exception $e) {
+            $this->log->write(array(
+                "MSG"=> $e->getMessage(),
+                "QUERY" => $insert, 
+                "CLASS" => __CLASS__
+            ));
         }
-        $this->clearsql();
-        return mysqli_insert_id($this->dbh);
     }
 
     public function get($dump = false) {
-        $i = 0;
-        $sWhere = '';
-        if (!empty($this->where)) {
-            foreach ($this->where as $val) {
-                if ($i != 0) {
-                    $sWhere .= ' and ';
+        try {
+            $i = 0;
+            $sWhere = '';
+            if (!empty($this->where)) {
+                foreach ($this->where as $val) {
+                    if ($i != 0) {
+                        $sWhere .= ' and ';
+                    }
+                    $sWhere .= $val;
+                    $i++;
                 }
-                $sWhere .= $val;
-                $i++;
+                $sWhere = " where " . $sWhere;
             }
-            $sWhere = " where " . $sWhere;
-        }
 
-        $i = 0;
-        $sOrderBy = '';
-        if (!empty($this->order)) {
-            foreach ($this->order as $key => $val) {
-                if ($i != 0) {
-                    $sOrderBy .= ', ';
+            $i = 0;
+            $sOrderBy = '';
+            if (!empty($this->order)) {
+                foreach ($this->order as $key => $val) {
+                    if ($i != 0) {
+                        $sOrderBy .= ', ';
+                    }
+
+                    if(is_numeric($key)){
+                        $sOrderBy .= $val;                
+                    }else{
+                        $sOrderBy .= $key . ' ' . $val;
+                    }
+                    $i++;
                 }
+                $sOrderBy = " order by " . $sOrderBy;
+            }
 
-                if(is_numeric($key)){
-                    $sOrderBy .= $val;                
-                }else{
-                    $sOrderBy .= $key . ' ' . $val;
+
+            $i = 0;
+            $sGroupBy = '';
+            if (!empty($this->group)) {
+                foreach ($this->group as $val) {
+                    if ($i != 0) {
+                        $sGroupBy .= ', ';
+                    }
+                    $sGroupBy .= $val;
+                    $i++;
                 }
-                $i++;
+                $sGroupBy = " group by " . $sGroupBy;
             }
-            $sOrderBy = " order by " . $sOrderBy;
-        }
 
-
-        $i = 0;
-        $sGroupBy = '';
-        if (!empty($this->group)) {
-            foreach ($this->group as $val) {
-                if ($i != 0) {
-                    $sGroupBy .= ', ';
+            $field = '';
+            if (!empty($this->select) && count($this->select) > 0) {
+                foreach ($this->select as $val) {
+                    $field .= $val . ',';
                 }
-                $sGroupBy .= $val;
-                $i++;
+            } else {
+                $field = '* ';
             }
-            $sGroupBy = " group by " . $sGroupBy;
-        }
 
-        $field = '';
-        if (!empty($this->select) && count($this->select) > 0) {
-            foreach ($this->select as $val) {
-                $field .= $val . ',';
+            $join = '';
+
+            if (!empty($this->join)) {
+                foreach ($this->join as $val) {
+                    $join .= $val . ' ';
+                }
             }
-        } else {
-            $field = '* ';
-        }
 
-        $join = '';
+            $field = substr($field, 0, -1);
 
-        if (!empty($this->join)) {
-            foreach ($this->join as $val) {
-                $join .= $val . ' ';
+            $select = "select " . $field
+                    . " from " . $this->from . " "
+                    . $join . " "
+                    . $sWhere . " "
+                    . $sGroupBy . " "
+                    . $sOrderBy; 
+
+            if (!empty($this->limit)) {
+                $select .= " LIMIT " . $this->limit;
             }
-        }
 
-        $field = substr($field, 0, -1);
+            if ($dump) {
+                die($select);
+            }
 
-        $select = "select " . $field
-                . " from " . $this->from . " "
-                . $join . " "
-                . $sWhere . " "
-                . $sGroupBy . " "
-                . $sOrderBy; 
+            $this->result = mysqli_query($this->dbh, $select);
 
-        if (!empty($this->limit)) {
-            $select .= " LIMIT " . $this->limit;
-        }
-
-        if ($dump) {
-            die($select);
-        }
-
-        $this->result = mysqli_query($this->dbh, $select);
-        if ($this->result === false) {
+            if ($this->result === false) {
+                $this->clearsql();
+                throw new \InvalidArgumentException("Select error system");
+            }
             $this->clearsql();
-            die('SELECT ERROR SYSTEM');
+            return true;
+
+        } catch (\Exception $e) {
+            $this->log->write(array(
+                "MSG"=> $e->getMessage(),
+                "QUERY" => $select, 
+                "CLASS" => __CLASS__
+            ));
         }
-        $this->clearsql();
-        return true;
     }
 
     public function getresult() {

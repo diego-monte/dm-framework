@@ -1,7 +1,6 @@
 <?php
 /**
- * DM-FRAMEWORK 2020-2020
- * Version: 1.1.0.0
+ * DM-FRAMEWORK
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 

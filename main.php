@@ -6,12 +6,12 @@ require_once("vendor/autoload.php");
 require_once("Core/Logs.php");
 require_once("Config/Constants.php");
 require_once("Core/Alerts.php");
+require_once("Core/Restful.php");
 require_once("Core/Views.php");
 require_once("Core/Controllers.php");
 require_once("Core/Models.php");
 /**
- * DM-FRAMEWORK 2020-2020
- * Version: 1.1.0.0
+ * DM-FRAMEWORK
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
@@ -27,6 +27,8 @@ class Main {
     public function __construct() {
         // Taking requests
         $uris = htmlentities($_GET['url']);
+        $uris = $this->uriFilter(strip_tags($uris));
+
         // Calling the views class
         $this->route = new Views\ViewsClass;
         // If the route is not found, the index will be informed as the default
@@ -40,6 +42,20 @@ class Main {
             header("location: " . "/" . DEPLOY . "/" . PAGE_DEFAULT);
         }
     } 
+    // Filtering uris
+    public function uriFilter($obj) {
+
+        $Arr = array(
+            "./"=>"", 
+            "../"=>"",
+            ".php"=>"",
+            ".ini"=>"",
+            ".html"=>"",
+            ".htm"=>""
+        );
+        return strTr($obj, $Arr);
+    }
+    
 }
 
 new Main();
