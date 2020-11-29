@@ -1,13 +1,14 @@
 <?php
 //error_reporting(0);
 /**
- * DM-FRAMEWORK 2020-2020
- * Version: 1.1.0.0
+ * DM-FRAMEWORK
  * Author: Diego Monte
  * E-Mail: d.h.m@hotmail.com
  * 
  * OBS: The framework is free to change but keep the credits.
  */
+$version = '1.2.0.0'; 
+
 // Connect to the database
 function conectDB() {
 
@@ -15,7 +16,7 @@ function conectDB() {
   $user = htmlentities($_POST['user']);
   $password = htmlentities($_POST['password']);
   $database = htmlentities($_POST['database']);
-  $port = (int)htmlentities($_POST['port']); 
+  $port = (int)htmlentities($_POST['port']);
 
   $db = new \mysqli($address, $user, $password, $database, $port);
   
@@ -443,7 +444,7 @@ if(count($_POST) > 0) {
 
         <div class="row">
           <div class="col-sm-12 text-center footer">
-            <p>Developed by <a href="https://diegomonte.com.br" target="_blank">diegomonte.com.br</a> - v1.1.0.0 - 2020-2020</p>
+            <p>Developed by <a href="https://diegomonte.com.br" target="_blank">diegomonte.com.br</a> - <?php echo($version); ?> - 2020-<?php echo(date("Y")); ?></p>
           </div> 
         </div>
 
