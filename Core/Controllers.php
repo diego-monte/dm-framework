@@ -7,6 +7,7 @@
  * OBS: The framework is free to change but keep the credits.
  */
 namespace Core\Controllers;
+
 use Core\Restful as Restful;
 use Core\Logs as Logs;
 
@@ -16,6 +17,9 @@ class ControllersClass extends Restful\RestFulClass {
     private $log;
 
     public function __construct() {
+
+        $this->loadLibrarie();
+        
         $this->log = new Logs\Log;
     }
     // Function loads the model

@@ -5,9 +5,10 @@ use Core\Controllers as Controllers;
 class Index_controller extends Controllers\ControllersClass {
 
     public function __construct() {
+        
         parent::__construct();
         $this->load_model("Index_model");
-        //$this->sendEmail();
+
     }
 
     public function setIndex($obj) { 

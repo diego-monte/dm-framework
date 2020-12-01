@@ -50,7 +50,7 @@ class ModelsClass {
                     , $this->porta);
 
             if (mysqli_connect_errno()) {
-                throw new \InvalidArgumentException("The connection failed!");
+                throw new \InvalidArgumentException("Database connection failed");
             }
             mysqli_set_charset($this->dbh, "utf8");
 

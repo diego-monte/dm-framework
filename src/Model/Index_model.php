@@ -7,7 +7,7 @@ class Index_model extends ModelsClass {
     }
 
     public function setIndex($obj) {
-
+        
         $this->set(array(
             "ct_name" => $obj['name'],
             "ct_email" => $obj['email'],

@@ -12,12 +12,15 @@ use \Firebase\JWT\JWT;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Libraries\Integration as Integration;
 
-class RestFulClass {
+class RestFulClass extends Integration\LibrariesClass {
 
     private $log;
 
     public function __construct() {
+
+        $this->loadLibrarie();
         $this->log = new Logs\Log;
     }
     // JWT ENCRYPTION FUNCTION

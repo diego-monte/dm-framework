@@ -7,7 +7,6 @@ class Index extends Views\ViewsClass {
     public function __construct($metodos) {
 
         $this->load_controller("Index_controller");
-
         $post = $this->POST();
 
         if($post != null) {

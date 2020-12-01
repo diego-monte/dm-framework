@@ -3,6 +3,7 @@
 //error_reporting(0);
 // Including classes
 require_once("vendor/autoload.php");
+require_once("Libraries/Integration.php");
 require_once("Core/Logs.php");
 require_once("Config/Constants.php");
 require_once("Core/Alerts.php");
@@ -23,8 +24,10 @@ class Main {
 
     private $data;
     private $route;
+    public $libraries;
 
     public function __construct() {
+        
         // Taking requests
         $uris = htmlentities($_GET['url']);
         $uris = $this->uriFilter(strip_tags($uris));
