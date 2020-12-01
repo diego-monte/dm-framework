@@ -7,6 +7,7 @@ The framework has the objective of easy web development, integrating the back-en
 [![Download](https://img.shields.io/github/downloads/diego-monte/dm-framework/total?color=brightgreen)]()
 [![Issues](https://img.shields.io/github/issues/diego-monte/dm-framework?color=brightgreen)](https://github.com/diego-monte/dm-framework/issues)
 [![Start](https://img.shields.io/github/stars/diego-monte/dm-framework?color=brightgreen)](https://github.com/diego-monte/dm-framework/stargazers)
+[![Forks](https://img.shields.io/github/forks/diego-monte/dm-framework?color=brightgreen)](https://github.com/diego-monte/dm-framework/network/members)
 [![GitHub contributors](https://img.shields.io/github/contributors/diego-monte/dm-framework?color=brightgreen)](https://GitHub.com/diego-monte/dm-framework/graphs/contributors/)
 
 
