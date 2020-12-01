@@ -1,2 +1,4 @@
-* linguist-vendored=false
-*.php linguist-detectable=true
+*.js export-ignore
+*.css export-ignore
+*.html export-ignore
+*.htm export-ignore
