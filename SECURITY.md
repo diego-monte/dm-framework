@@ -6,10 +6,10 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.0.0 | November 13rd, 2020|
-| 1.1.0.0 | November 16rd, 2020|
-| 1.2.0.0 | November 28rd, 2020|
 | 1.3.1.0 | December 01rd, 2020|
+| 1.2.0.0 | November 28rd, 2020|
+| 1.1.0.0 | November 16rd, 2020|
+| 1.0.0.0 | November 13rd, 2020|
 
 ## Reporting a Vulnerability
 
