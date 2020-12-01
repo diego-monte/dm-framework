@@ -1,2 +1,2 @@
 * linguist-vendored=false
-*.php linguist-vendored=true
+*.php linguist-detectable=true
