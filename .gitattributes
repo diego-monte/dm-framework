@@ -1,4 +1,4 @@
-*.js export-ignore
-*.css export-ignore
-*.html export-ignore
-*.htm export-ignore
+*.js linguist-language=php
+*.css linguist-language=php
+*.html linguist-language=php
+*.htm linguist-language=php
