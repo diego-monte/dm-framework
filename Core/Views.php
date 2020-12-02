@@ -19,7 +19,6 @@ class ViewsClass extends Alerts\Actions {
     public function __construct() {
         $this->log = new Logs\Log;
     }
-
     // VIEW LOAD FUNCTION
     public function load_view($route, $uris) {
         try {
@@ -40,10 +39,21 @@ class ViewsClass extends Alerts\Actions {
                     throw new \InvalidArgumentException($file_view . " " . MSG_ERROR_500);
                 }
             } else if(file_exists($assets['path'])) {  
-                // Arrow in the header the file type
-                header("Content-type: " . $assets["header"] . "; charset: UTF-8");
-                // Includes the file 
-                require_once(strip_tags($assets["path"])); 
+                // Blocking directory reading
+                if(!is_dir($assets['path'])) {
+                    // Validating the reading of the file
+                    if(is_readable($assets['path'])) {
+                        // Arrow in the header the file type
+                        header("Content-type: " . $assets["header"] . "; charset: UTF-8");
+                        // Includes the file 
+                        require_once(strip_tags($assets["path"])); 
+                    }
+
+                } else {
+                    // If the file entered in the url is not found it will display an error
+                    die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
+                }
+            
             } else {
                 // If the file entered in the url is not found it will display an error
                 die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
