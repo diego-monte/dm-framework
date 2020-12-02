@@ -3,6 +3,7 @@
     "name": "diego-monte/dm-framework",
     "description": "DM-Framework - Developing with ease",
     "keywords": ["framework", "dm", "dm-framework", "diego-monte"],
+    "type": "project",
     "license": "MIT",
     "homepage": "https://diegomonte.com.br",
     "support": {
