@@ -2,13 +2,15 @@
 namespace Libraries\Integration;
 
 require_once("Libraries/FtpClient.php");
+require_once("Libraries/Telegram.php");
 
 use Libraries\FtpClient as FtpClient;
+use Libraries\Telegram as Telegram;
 
 class LibrariesClass {
 
     public $FtpClient;
-    public $Upload;
+    public $Telegram;
 
     public function __construct() {
 
@@ -16,6 +18,7 @@ class LibrariesClass {
     public function loadLibrarie() {
 
         $this->FtpClient = new FtpClient\FtpClass;
+        $this->Telegram = new Telegram\TelegramClass;
 
     }
 }

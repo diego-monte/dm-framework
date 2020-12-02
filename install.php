@@ -7,7 +7,7 @@
  * 
  * OBS: The framework is free to change but keep the credits.
  */
-$version = '1.2.0.0'; 
+$version = '1.3.1.0'; 
 
 // Connect to the database
 function conectDB() {
@@ -104,10 +104,11 @@ function createFileConstats() {
 		define('TEMPLATE', \"Default\");
     define('PATH_ASSETS', \"Assets\");
     define('PATH_LOGS', \"Storage/logs\");
+    define('PATH_STORAGE', \"Storage\");
 		// SYSTEM
 		define('DEPLOY', \"$deploy\");
 		define('PAGE_DEFAULT', \"index\");
-    define('VERSION', \"1.1.0.0\");
+    define('VERSION', \"1.3.1.0\");
     // MSGS
     define('MSG_ERROR_TAG', \"ERROR TAG, EXAMPLE OF HOW TO USE TAG {{STRING}}\");
     define('MSG_ERROR_500', \"CLASS DOES NOT EXIST OR IS POORLY STRUCTURED\");
