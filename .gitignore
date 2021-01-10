@@ -1,4 +1,5 @@
-/Config
+.env
 /vendor
 composer.lock
 .htaccess
+/Core/Constants.php

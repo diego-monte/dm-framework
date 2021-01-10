@@ -1,5 +1,4 @@
 <?php
-require_once("./Config/Constants.php");
 /**
  * DM-FRAMEWORK
  * Author: Diego Monte
@@ -37,11 +36,13 @@ class ModelsClass {
         try {
             $this->log = new Logs\Log;
 
-            $this->usuario = DATABASE['DATABASE']['usuario'];
-            $this->senha = DATABASE['DATABASE']['senha'];
-            $this->banco = DATABASE['DATABASE']['banco'];
-            $this->porta = (int)DATABASE['DATABASE']['porta'];
-            $this->endereco = DATABASE['DATABASE']['endereco'];
+            $data = parse_ini_file("./.env");
+            
+            $this->usuario = $data['usuario'];
+            $this->senha = $data['senha'];
+            $this->banco = $data['banco'];
+            $this->porta = (int)$data['porta'];
+            $this->endereco = $data['endereco'];
 
             $this->dbh = new \mysqli($this->endereco
                     , $this->usuario
