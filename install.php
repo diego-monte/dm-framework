@@ -53,13 +53,12 @@ function conectDB() {
   }
 	mysqli_close($db);
 }
-// Creating a connection file with the config.ini database
+// Creating a connection file with the .env database
 function createFileConexaoMysql() {
 
 	$deploy = basename(__DIR__);
 
 	$source = '	
-	[DATABASE]
 	usuario = "'.$_POST['user'].'"
 	senha = "'.$_POST['password'].'"
 	banco = '.$_POST['database'].'
@@ -67,7 +66,7 @@ function createFileConexaoMysql() {
 	endereco = '.$_POST['address'].'
 	';
 
-	$fp = fopen(__DIR__ . "/Config/Conexao_mysql.ini","wb");
+	$fp = fopen(__DIR__ . "/.env","wb");
 	fwrite($fp, $source);
 	fclose($fp);
 
@@ -95,7 +94,7 @@ function createFileConstats() {
      */
 
 		// ARQUIVO DE CONEXAO AO BANCO DE DADOS
-		define('DATABASE', parse_ini_file(\"Conexao_mysql.ini\", true));
+		define('DATABASE', parse_ini_file(\".env\", true));
 		// PATH'S
 		define('PATH_VIEW', \"src/View\");
 		define('PATH_CONTROLLER', \"src/Controller\");
@@ -176,7 +175,7 @@ function createFileConstats() {
 		?>
 	";
 
-	$fp = fopen(__DIR__ . "/Config/Constants.php","wb");
+	$fp = fopen(__DIR__ . "/core/Constants.php","wb");
 	fwrite($fp, $source);
 	fclose($fp);
 
@@ -217,15 +216,6 @@ function createFileHtaccess() {
 		return false;
 	}
 }
-// Creating config directory
-function createDirConfig() {
-	if(mkdir('Config', 0777, true)) {
-		chmod('Config', 0777);
-		return true;
-	} else {
-		return false;
-	}
-}
 
 if(count($_POST) > 0) {
 
@@ -239,29 +229,28 @@ if(count($_POST) > 0) {
 			$finish[] = "success";
 			$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Successfully connected to the database.<br>";
 
-			if(createDirConfig()) {
-				if(createFileConexaoMysql()) {
-					$finish[] = "success";
-					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Conexao_mysql.ini file successfully created.<br>";
-				} else {
-					$finish[] = "problem";
-					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Conexao_mysql.ini (Permission denied).<br>";
-				}
-				if(createFileConstats()) {
-					$finish[] = "success";
-					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Constant.php file successfully created.<br>";
-				} else {
-					$finish[] = "problem";
-					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Constants.php (Permission denied).<br>";
-				}
-				if(createFileHtaccess()) {
-					$finish[] = "success";
-					$status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> .htaccess file successfully created.<br>";
-				} else {
-					$finish[] = "problem";
-					$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file .htaccess (Permission denied).<br>";
-				}
-			}
+      if(createFileConexaoMysql()) {
+        $finish[] = "success";
+        $status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> .env file successfully created.<br>";
+      } else {
+        $finish[] = "problem";
+        $status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Conexao_mysql.ini (Permission denied).<br>";
+      }
+      if(createFileConstats()) {
+        $finish[] = "success";
+        $status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> Constant.php file successfully created.<br>";
+      } else {
+        $finish[] = "problem";
+        $status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Constants.php (Permission denied).<br>";
+      }
+      if(createFileHtaccess()) {
+        $finish[] = "success";
+        $status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> .htaccess file successfully created.<br>";
+      } else {
+        $finish[] = "problem";
+        $status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file .htaccess (Permission denied).<br>";
+      }
+			
 		} else {
 			$finish[] = "problem";
 			$status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: Unable to connect to MySQL.<br>";
@@ -397,31 +386,31 @@ if(count($_POST) > 0) {
               <div class="col-sm-3">
                 <div class="form-group">
                   <label for="address">Address:</label>
-                  <input type="text" class="form-control inputs" placeholder="localhost" value="<?php echo($_POST['address']); ?>" name="address" id="address">
+                  <input type="text" class="form-control inputs" placeholder="localhost" value="<?php echo(isset($_POST['address']) ? $_POST['address'] : ''); ?>" name="address" id="address">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="user">User:</label>
-                  <input type="text" class="form-control inputs" placeholder="root" value="<?php echo($_POST['user']); ?>" name="user" cid="user">
+                  <input type="text" class="form-control inputs" placeholder="root" value="<?php echo(isset($_POST['user']) ? $_POST['user'] : ''); ?>" name="user" cid="user">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="password">Password:</label>
-                  <input type="text" class="form-control inputs" value="<?php echo($_POST['password']); ?>" name="password" id="password">
+                  <input type="text" class="form-control inputs" value="<?php echo(isset($_POST['password']) ? $_POST['password'] : ''); ?>" name="password" id="password">
                 </div>
               </div>
               <div class="col-sm-3">
                 <div class="form-group">
                   <label for="database">Database:</label>
-                  <input type="text" class="form-control inputs" placeholder="dm_framework" value="<?php echo($_POST['database']); ?>" name="database" id="database">
+                  <input type="text" class="form-control inputs" placeholder="dm_framework" value="<?php echo(isset($_POST['database']) ? $_POST['database'] : ''); ?>" name="database" id="database">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="port">Port:</label>
-                  <input type="number" class="form-control inputs" placeholder="3306" value="<?php echo($_POST['port']); ?>" name="port" id="port">
+                  <input type="number" class="form-control inputs" placeholder="3306" value="<?php echo(isset($_POST['port']) ? $_POST['port'] : ''); ?>" name="port" id="port">
                 </div>
               </div>
               <?php 

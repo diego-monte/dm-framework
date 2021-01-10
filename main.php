@@ -5,7 +5,7 @@
 require_once("vendor/autoload.php");
 require_once("Libraries/Integration.php");
 require_once("Core/Logs.php");
-require_once("Config/Constants.php");
+require_once("core/Constants.php");
 require_once("Core/Alerts.php");
 require_once("Core/Restful.php");
 require_once("Core/Views.php");
