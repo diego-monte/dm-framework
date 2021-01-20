@@ -2,8 +2,16 @@
 // Disable errors
 //error_reporting(0);
 // Including classes
-require_once("vendor/autoload.php");
+if(file_exists("vendor/autoload.php")) {
+    require_once("vendor/autoload.php");
+} else {
+    die("vendor/autoload.php not found!<br><b>> composer install</b>");
+}
+if(file_exists("install.php")) {
+    die("please remove the <b>install.php</b> file");
+}
 require_once("Libraries/Integration.php");
+require_once("Core/Cache.php");
 require_once("Core/Logs.php");
 require_once("core/Constants.php");
 require_once("Core/Alerts.php");
@@ -62,5 +70,3 @@ class Main {
 }
 
 new Main();
-
-
