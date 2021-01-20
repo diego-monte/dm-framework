@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 /**
  * DM-FRAMEWORK
  * Author: Diego Monte
@@ -202,7 +202,7 @@ function createFileHtaccess() {
 	RewriteCond %{REQUEST_URI} !-f
 	RewriteCond %{REQUEST_URI} !-d
 	RewriteCond %{REQUEST_URI} !-l
-	RewriteCond $1 !\.(gif|jpe?g|png|ico)$ [NC]
+  RewriteCond $1 !\.(gif|jpe?g|png|ico)$ [NC]
   RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
 	";
 

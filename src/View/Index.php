@@ -1,10 +1,16 @@
 <?php 
-
 use Core\Views as Views;
+use Core\Caches as Caches;
 
 class Index extends Views\ViewsClass {
 
+    private $cache;
+
     public function __construct($metodos) {
+
+        $this->cache = new Caches\Cache();
+
+        $cache = $this->cache->read('cache_view_index');
 
         $this->load_controller("Index_controller");
         $post = $this->POST();
@@ -19,7 +25,12 @@ class Index extends Views\ViewsClass {
         $render = $this->setDATA_HTML("{{SITE_NAME}}", 'DM Framework', $render);
         $render = $this->setDATA_HTML("{{PATH_IMAGES}}", PATH_TEMPLATE . "/" . TEMPLATE . "/" . PATH_ASSETS, $render);
 
-        print $render;
+        if (!$cache) {
+            $cache = $render;
+            $this->cache->save('cache_view_index', $cache, '30 seconds');
+        }
+
+        print $cache;
     }
  
 }

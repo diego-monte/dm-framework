@@ -48,12 +48,10 @@ class ViewsClass extends Alerts\Actions {
                         // Includes the file 
                         require_once(strip_tags($assets["path"])); 
                     }
-
                 } else {
                     // If the file entered in the url is not found it will display an error
                     die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
                 }
-            
             } else {
                 // If the file entered in the url is not found it will display an error
                 die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));

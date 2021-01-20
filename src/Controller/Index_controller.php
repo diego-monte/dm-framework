@@ -1,5 +1,4 @@
 <?php
-
 use Core\Controllers as Controllers;
 
 class Index_controller extends Controllers\ControllersClass {
