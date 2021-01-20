@@ -12,11 +12,10 @@ class Cache {
     }
 
     protected function setFolder($folder) {
-        // Se a pasta existir, for uma pasta e puder ser escrita
         if (file_exists($folder) && is_dir($folder) && is_writable($folder)) {
             $this->folder = $folder;
         } else {
-            trigger_error('Não foi possível acessar a pasta de cache', E_USER_ERROR);
+            trigger_error('Could not access the cache folder', E_USER_ERROR);
         }
     }
 
@@ -25,12 +24,11 @@ class Cache {
     }
 
     protected function createCacheFile($key, $content) {
-        // Gera o nome do arquivo
+
         $filename = $this->generateFileLocation($key);
-    
-        // Cria o arquivo com o conteúdo
+
         return file_put_contents($filename, $content)
-            OR trigger_error('Não foi possível criar o arquivo de cache', E_USER_ERROR);
+            OR trigger_error('The cache file could not be created', E_USER_ERROR);
     }
 
     public function save($key, $content, $time = null) {
@@ -53,17 +51,11 @@ class Cache {
             $cache = unserialize(file_get_contents($filename));
 
             if ($cache['expires'] > time()) {
-
                 return $cache['content'];
-
             } else {
-
                 unlink($filename);
-
             }
-
         }
-
         return null;
     }
 }
