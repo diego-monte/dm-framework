@@ -13,7 +13,7 @@ if(file_exists("install.php")) {
 require_once("Libraries/Integration.php");
 require_once("Core/Cache.php");
 require_once("Core/Logs.php");
-require_once("core/Constants.php");
+require_once("Core/Constants.php");
 require_once("Core/Alerts.php");
 require_once("Core/Restful.php");
 require_once("Core/Views.php");
