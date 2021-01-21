@@ -175,7 +175,7 @@ function createFileConstats() {
 		?>
 	";
 
-	$fp = fopen(__DIR__ . "/core/Constants.php","wb");
+	$fp = fopen(__DIR__ . "/Core/Constants.php","wb");
 	fwrite($fp, $source);
 	fclose($fp);
 
@@ -234,7 +234,7 @@ if(count($_POST) > 0) {
         $status .= "<i class=\"fas fa-check\" style=\"color:green\"></i> .env file successfully created.<br>";
       } else {
         $finish[] = "problem";
-        $status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file Conexao_mysql.ini (Permission denied).<br>";
+        $status .= "<i class=\"fas fa-times\" style=\"color:red\"></i> Error: problem creating file .env (Permission denied).<br>";
       }
       if(createFileConstats()) {
         $finish[] = "success";
