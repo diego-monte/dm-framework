@@ -2,4 +2,5 @@
 /vendor
 composer.lock
 .htaccess
+install.php~
 /Core/Constants.php
