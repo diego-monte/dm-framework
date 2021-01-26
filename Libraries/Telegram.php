@@ -14,6 +14,11 @@ class TelegramClass {
     
     private $chatId;
     private $token;
+    private $log;
+
+    public function __construct() {
+        $this->log = new Logs\Log;
+    }
 
     public function chatId($id) {
         if($id) {

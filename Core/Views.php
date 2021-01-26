@@ -129,7 +129,7 @@ class ViewsClass extends Alerts\Actions {
             $arr = array();
 
             foreach($metodo as $key => $value) {
-                $arr[$key] = htmlentities($value);
+                $arr[$key] = strip_tags($value);
             }
             return $arr;
         }
@@ -144,7 +144,7 @@ class ViewsClass extends Alerts\Actions {
             $arr = array();
 
             foreach($metodo as $key => $value) {
-                $arr[$key] = htmlentities($value);
+                $arr[$key] = strip_tags($value);
             }
             return $arr;
         }
