@@ -35,7 +35,7 @@ class Main {
     public $libraries;
 
     public function __construct() {
-        
+ 
         // Taking requests
         $uris = htmlentities($_GET['url']);
         $uris = $this->uriFilter(strip_tags($uris));

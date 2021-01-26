@@ -24,4 +24,11 @@ class Index_model extends ModelsClass {
         } 
     }
 
+    public function getIndex() {
+        $this->select("ct_id as id, ct_name as name, ct_email as email, ct_subject as subject, ct_message as message, ct_timestamp as date");
+        $this->from("contacts");
+        $this->get();
+        return $this->result();
+    }
+
 }

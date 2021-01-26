@@ -20,6 +20,27 @@ class Index_controller extends Controllers\ControllersClass {
         return $this->model->setIndex($obj);
     }
 
+    public function getIndex() { 
+
+        $obj = $this->model->getIndex();
+
+        $arr = array();
+
+        foreach($obj as $value) {
+            $arr[] = array(
+                "id" => $value['id'],
+                "name" => $value['name'],
+                "email" => $value['email'],
+                "subject" => $value['subject'],
+                "message" => $this->BBcode->filter($value['message']),
+                "date" => $value['date']
+            );
+        }
+
+        return $arr;
+
+    }
+
     // funcao valida dados
     private function valida($obj) {
 
