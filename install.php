@@ -103,7 +103,9 @@ function createFileConstats() {
 		define('TEMPLATE', \"Default\");
     define('PATH_ASSETS', \"Assets\");
     define('PATH_LOGS', \"Storage/logs\");
-    define('PATH_STORAGE', \"Storage\");
+    define('PATH_LOGS', dirname(__FILE__) . \"Storage/logs\");
+    define('PATH_IMAGES', dirname(__FILE__) . \"/../Storage/images\");
+    define('PATH_STORAGE', dirname(__FILE__) . \"/../Storage\");
 		// SYSTEM
 		define('DEPLOY', \"$deploy\");
 		define('PAGE_DEFAULT', \"index\");
