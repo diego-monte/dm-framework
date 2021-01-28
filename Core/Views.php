@@ -22,39 +22,24 @@ class ViewsClass extends Alerts\Actions {
     // VIEW LOAD FUNCTION
     public function load_view($route, $uris) {
         try {
-            $route_no_extencion = str_replace(".php","", $route);
-            // Load files inside Assets example css and js
-            $assets = $this->load_assets($route_no_extencion); 
+            // build a standardized route 
+            $route = $this->buildRoute($route);
             // File path views
-            $file_view = "." . DIRECTORY_SEPARATOR . PATH_VIEW . DIRECTORY_SEPARATOR . ucfirst($route_no_extencion) . ".php"; 
+            $file_view = "." . DIRECTORY_SEPARATOR . PATH_VIEW . DIRECTORY_SEPARATOR . ucfirst($route) . ".php"; 
             // Check if the view file exists
             if(file_exists($file_view)) { 
                 // Includes the file
                 require_once($file_view); 
                 // Check if the class exists in the view file
-                if (class_exists($route_no_extencion)) { 
+                if (class_exists($route)) { 
                     // Instance to class
-                    new $route_no_extencion($uris);
+                    new $route($uris);
                 } else {
                     throw new \InvalidArgumentException($file_view . " " . MSG_ERROR_500);
                 }
-            } else if(file_exists($assets['path'])) {  
-                // Blocking directory reading
-                if(!is_dir($assets['path'])) {
-                    // Validating the reading of the file
-                    if(is_readable($assets['path'])) {
-                        // Arrow in the header the file type
-                        header("Content-type: " . $assets["header"] . "; charset: UTF-8");
-                        // Includes the file 
-                        require_once(strip_tags($assets["path"])); 
-                    }
-                } else {
-                    // If the file entered in the url is not found it will display an error
-                    die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
-                }
             } else {
                 // If the file entered in the url is not found it will display an error
-                die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
+                die($this->errorBild(404, $route . " FILE NOT FOUND"));
             }
         } catch (\Exception $e) {
             $this->log->write(array(
@@ -81,7 +66,7 @@ class ViewsClass extends Alerts\Actions {
                 }
             } else {
                 // If the file entered in the url is not found it will display an error
-                die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
+                die($this->errorBild(404, $route . " FILE NOT FOUND"));
             }
         } catch (\Exception $e) {
             $this->log->write(array(
@@ -94,13 +79,13 @@ class ViewsClass extends Alerts\Actions {
     // FUNCTION LOAD TEMPLATE FILES
     public function load_html($file) {
         // Path of controller files
-        $file_html = "." . DIRECTORY_SEPARATOR . PATH_TEMPLATE  . DIRECTORY_SEPARATOR . TEMPLATE . DIRECTORY_SEPARATOR . ucfirst($file) . ".html";
+        $file_html = "." . DIRECTORY_SEPARATOR . PATH_TEMPLATE  . DIRECTORY_SEPARATOR . TEMPLATE . DIRECTORY_SEPARATOR . $file[0] . ".html";
         // Check if the template's html file exists
         if(file_exists($file_html)) {
             return file_get_contents($file_html);
         } else {
             // If the file entered in the url is not found it will display an error
-            die($this->errorBild(404, $route_no_extencion . " FILE NOT FOUND"));
+            die($this->errorBild(404, $route . " FILE NOT FOUND"));
         }
     }
     // INSTANCE PHP FUNCTION IN HTML
@@ -149,34 +134,15 @@ class ViewsClass extends Alerts\Actions {
             return $arr;
         }
     }
-    // FUNCTION LOADS ASSETS FROM TEMPLATE
-    public function load_assets($route) {
+    // METHOD BUILDS THE STANDARD ROUTE 
+    public function buildRoute($route) {
 
-        $fileArray = explode(".", $route);
-        $extension = array_pop($fileArray);
-        $file_bootstrap = array();
+        $route = str_replace(".php","", $route);
+        $route = str_replace("-"," ", $route);
+        $route_space = str_replace("_"," ", $route);
+        $route_ucwords = ucwords($route_space);
+        return str_replace(" ","", $route_ucwords);
 
-        if($extension == "css") {
-            $file_bootstrap['header'] = "text/css";
-        } else if($extension == "js") {
-            $file_bootstrap['header'] = "text/js";
-        } else if($extension == "woff") {
-            header("Content-type: application/x-font-woff; charset: UTF-8");
-            file($route);
-            exit;
-        } else if($extension == "ttf") {
-            header("Content-type: application/x-font-ttf; charset: UTF-8");
-            file($route);
-            exit;
-        } else if($extension == "woff2") {
-            header("Content-type: application/x-font-woff2; charset: UTF-8");
-            file($route);
-            exit;
-        }
-        // Path of the bootstrap files
-        $file_bootstrap['path'] = "." . DIRECTORY_SEPARATOR . PATH_TEMPLATE . DIRECTORY_SEPARATOR . TEMPLATE . DIRECTORY_SEPARATOR . PATH_ASSETS . DIRECTORY_SEPARATOR . $route;
-
-        return $file_bootstrap;
     }
 
 }
