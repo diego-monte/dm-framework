@@ -101,7 +101,7 @@ function createFileConstats() {
 		define('PATH_MODEL', \"src/Model\");
 		define('PATH_TEMPLATE', \"src/Templates\");
 		define('TEMPLATE', \"Default\");
-    define('PATH_ASSETS', PATH_TEMPLATE . \"/\" . TEMPLATE . \"/\" . \"Assets\");
+    define('PATH_ASSETS', PATH_TEMPLATE . \"/\" . TEMPLATE . \"/\" . \"Assets\"); 
     define('PATH_LOGS', \"Storage/logs\");
     define('PATH_LOGS', dirname(__FILE__) . \"Storage/logs\");
     define('PATH_IMAGES', dirname(__FILE__) . \"/../Storage/images\");
