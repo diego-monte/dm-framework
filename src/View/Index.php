@@ -10,7 +10,7 @@ class Index extends Views\ViewsClass {
 
         $this->load_controller("Index_controller");
         $this->setIndex();
-        $this->htmlRender();
+        $this->htmlRender($metodos);
 
     }
 
@@ -40,14 +40,14 @@ class Index extends Views\ViewsClass {
 
     }
 
-    private function htmlRender() {
+    private function htmlRender($metodos) {
 
         $this->cache = new Caches\Cache();
         $cache = $this->cache->read('cache_view_index');
 
         //$getIndex = $this->getIndex();
 
-        $render = $this->load_html("Index");
+        $render = $this->load_html($metodos);
         $render = $this->setDATA_HTML("{{TITLE}}", 'DM Framework - Sua plataforma com facilidade', $render); 
         $render = $this->setDATA_HTML("{{SITE_NAME}}", 'DM Framework', $render);
         $render = $this->setDATA_HTML("{{PATH_ASSETS}}", PATH_ASSETS, $render);
