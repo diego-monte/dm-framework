@@ -204,7 +204,7 @@ function createFileHtaccess() {
 	RewriteCond %{REQUEST_URI} !-f
 	RewriteCond %{REQUEST_URI} !-d
 	RewriteCond %{REQUEST_URI} !-l
-  RewriteCond $1 !\.(gif|jpe?g|png|ico|css|js)$ [NC]
+  RewriteCond $1 !\.(gif|jpe?g|png|ico|css|js|woff2|woff|zip|rar|exe)$ [NC]
   RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
 	";
 
