@@ -101,7 +101,7 @@ function createFileConstats() {
 		define('PATH_MODEL', \"src/Model\");
 		define('PATH_TEMPLATE', \"src/Templates\");
 		define('TEMPLATE', \"Default\");
-    define('PATH_ASSETS', \"Assets\");
+    define('PATH_ASSETS', PATH_TEMPLATE . \"/\" . TEMPLATE . \"/\" . \"Assets\"); 
     define('PATH_LOGS', \"Storage/logs\");
     define('PATH_LOGS', dirname(__FILE__) . \"Storage/logs\");
     define('PATH_IMAGES', dirname(__FILE__) . \"/../Storage/images\");
@@ -204,7 +204,7 @@ function createFileHtaccess() {
 	RewriteCond %{REQUEST_URI} !-f
 	RewriteCond %{REQUEST_URI} !-d
 	RewriteCond %{REQUEST_URI} !-l
-  RewriteCond $1 !\.(gif|jpe?g|png|ico)$ [NC]
+  RewriteCond $1 !\.(gif|jpe?g|png|ico|css|js)$ [NC]
   RewriteRule ^(.*)$ main.php?url=$1 [QSA,L]
 	";
 
